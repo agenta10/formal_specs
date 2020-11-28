@@ -20,7 +20,7 @@ class LimitedStack{
       {   top==capacity-1
       }
       
-      
+      // initializing stack
       method Init(c : int)
       modifies this;
       requires arr==null;
@@ -29,17 +29,32 @@ class LimitedStack{
       ensures Valid();
       ensures capacity==c;
       ensures top==-1;
+      ensures arr.Length==c;
       {
         capacity := c;
         arr := new int[c];
         top := -1;
       }
 
+      // getting the top  of stack
       method Peek() returns (elem : int)
       requires Valid();
       requires !Empty();
       ensures elem==arr[top];
       {
           elem := arr[top];
+      }
+      
+      // pushing to the top of non full stack
+      method Push(elem : int)
+      modifies this.arr,this;
+      requires Valid();
+      requires !Full();
+      ensures Valid();
+      ensures !Empty();
+      ensures arr[top]==elem;
+      //ensures forall i:: 0<=i<top ==> old(arr[i])==arr[i];
+      {   top := top+1;
+          arr[top] := elem;
       }
 }
